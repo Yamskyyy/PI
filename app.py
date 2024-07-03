@@ -71,6 +71,14 @@ def dashboard():
     order=list(db.order.find({}))
     return render_template('dashboard.html', order=order)
 
+@app.route('/dashboard_user',methods=['GET'])
+def dashboard_user():
+    if request.method=='POST':
+        # Handle POST Request here
+        return render_template('index.html')
+    order=list(db.order.find({}))
+    return render_template('dashboard_user.html', order=order)
+
 @app.route("/login")
 def login():
     token_receive = request.cookies.get(TOKEN_KEY)
@@ -223,6 +231,14 @@ def order():
     order=list(db.order.find({}))
     return render_template('order.html', order=order)
 
+@app.route('/order_admin', methods=['GET', 'POST'])
+def order_admin():
+    if request.method=='POST':
+        # Handle POST Request here
+        return render_template('index.html')
+    order=list(db.order.find({}))
+    return render_template('order_admin.html', order=order)
+
 @app.route('/AddOrder',methods=['GET', 'POST'])
 def AddOrder():
     if request.method=='POST':
@@ -230,6 +246,8 @@ def AddOrder():
         dari = request.form['dari']
         untuk = request.form['untuk']
         deskripsi = request.form['deskripsi']
+        count = db.order.count_documents({})
+        num = count + 1
 
         gambar=request.files['gambar']
         extension= gambar.filename.split('.')[-1]
@@ -240,11 +258,14 @@ def AddOrder():
         gambar.save(save_to)
 
         doc = {
+            'num' : num,
             'nama' : nama,
             'dari' : dari,
             'untuk' : untuk,
             'deskripsi' : deskripsi,
-            'gambar' : gambar_name
+            'gambar' : gambar_name,
+            'status' : 'Menunggu Persetujuan',
+            'Alasan' : '-'
         }
         db.order.insert_one(doc)
         return redirect(url_for('order'))
@@ -281,11 +302,36 @@ def EditOrder(_id):
 
     return render_template('EditOrder.html', data=data)  
 
-@app.route('/DeleteOrder/<_id>',methods=['GET', 'POST'])
-def DeleteOrder(_id):
-    id = ObjectId(_id)
-    db.order.delete_one({'_id':id})
-    return redirect(url_for('order'))
+@app.route("/delete_order", methods=["POST"])
+def delete_order():
+    try:
+        num_receive = request.form['num_give']
+        db.order.delete_one({'num': int(num_receive)})
+        return jsonify({'msg': 'delete success!'})
+    except Exception as e:
+        print(f"Error in /delete_order: {e}")
+        return jsonify({'msg': 'error', 'message': str(e)}), 500
+
+
+@app.route("/approve", methods=["POST"])
+def approve():
+    num_receive = request.form['num_give']
+    db.order.update_one(
+        {'num': int(num_receive)},
+        {'$set': {'status': 'Disetujui'}}
+    )
+    return jsonify({'msg': 'update done!'})
+
+@app.route("/reject", methods=["POST"])
+def reject():
+    num_receive = request.form['num_give']
+    alasan_receive = request.form['alasan']
+    db.order.update_one(
+        {'num': int(num_receive)},
+        {'$set': {'status': 'Ditolak', 'Alasan' : alasan_receive}}
+    )
+    return jsonify({'msg': 'update done!'})
+
 
 
 if __name__ == "__main__":

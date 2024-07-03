@@ -14,7 +14,7 @@
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Poetsen One", sans-serif;
   background: #fce7e7;
   color: #444444;
 }
@@ -383,8 +383,8 @@ h6 {
   transition: all 0.5s;
   z-index: 997;
   height: 60px;
-  box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
-  background-color: #681212;
+  box-shadow: 0px 2px 20px rgba(131, 180, 255, 0.1);
+  background-color: #4B70F5;
   padding-left: 20px;
   /* Toggle Sidebar Button */
   /* Search Bar */
@@ -629,7 +629,7 @@ h6 {
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: #aab7cf;
+  background-color: #A7E6FF;
 }
 
 @media (min-width: 1200px) {
@@ -675,7 +675,7 @@ h6 {
 }
 
 .sidebar-nav .nav-item .active {
-  background-color: #e8c2c2;
+  background-color: #BBE9FF;
 
 }
 
@@ -716,7 +716,7 @@ h6 {
 
 .sidebar-nav .nav-link:hover {
   color: #fff;
-  background: #771E1E;
+  background: #A7E6FF;
 }
 
 .sidebar-nav .nav-link:hover i {

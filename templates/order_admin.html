@@ -34,7 +34,7 @@
             });
         });
 
-        function hide() {
+        function hide(){
             $('#deleteModal').modal('hide');
         };
     </script>
@@ -51,7 +51,7 @@
     </div><!-- End Page Title -->
 
     <div class="row justify-content-end m-2">
-        <a href="/AddOrder" style="width: 150px">
+        <!-- <a href="/AddOrder" style="width: 150px">
             <div
                 style="display: flex; background-color: #B52424; width:150px; border-radius:8px; height:40px; align-items: center;">
 
@@ -68,25 +68,23 @@
                 </div>
 
             </div>
-        </a>
+        </a> -->
     </div>
 
     <div class="tabel mt-4">
         <div class="card border-0 shadow mb-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table
-                        class="table table-sm table-striped table-centered table-nowrap mb-0 rounded mt-3 align-middle"
-                        style="text-align: center;">
+                    <table class="table table-sm table-striped table-centered table-nowrap mb-0 rounded mt-3 align-middle" style="text-align: center;">
                         <thead class="thead-light">
-                            <tr>
+                            <tr> 
                                 <th class="border-0 rounded-start">No</th>
                                 <th class="border-0">Nama Order</th>
                                 <th class="border-0">Dari</th>
                                 <th class="border-0">Untuk</th>
                                 <th class="border-0">Deskripsi</th>
                                 <th class="border-0">Lampiran Foto</th>
-                                <th class="border-0 rounded-end text-center">Aksi</th>
+                                <!-- <th class="border-0 rounded-end text-center">Aksi</th> -->
                             </tr>
                         </thead>
                         {% for item in order %}
@@ -100,7 +98,7 @@
                                 <img src="../static/assets/Imgorder/{{item.gambar}}" alt="" width="100">
                             </td>
 
-                            <td class="text-center">
+                            <!-- <td class="text-center">
                                 <a href="/EditOrder/{{item._id}}">
                                     <img src="https://img.icons8.com/plumpy/26/000000/edit-calendar.png" /></a>
                                 |
@@ -143,7 +141,7 @@
                                             </g>
                                         </g>
                                     </svg></a>
-                            </td>
+                            </td> -->
                         </tr>
                         <!-- Modal -->
                         <div id="deleteModal" class="modal fade" tabindex="-1" role="dialog"
@@ -152,8 +150,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Penghapusan</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                            onclick="hide()">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="hide()">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -163,20 +160,18 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" id="cancel"
                                             data-dismiss="modal">Batal</button>
-                                            <a id="confirmDeleteButton" onclick="delete_order('{{ item.num }}')"
+                                        <a id="confirmDeleteButton" href="/DeleteOrder/{{item._id}}"
                                             class="btn btn-danger">Hapus</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                        {% endfor %}
+                    </table>
                 </div>
-                {% endfor %}
-                </table>
             </div>
+            <!-- /.card -->
         </div>
-        <!-- /.card -->
-    </div>
     </div>
     </div>
 </main><!-- End #main -->

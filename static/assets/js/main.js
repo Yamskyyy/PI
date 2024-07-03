@@ -312,3 +312,75 @@
   }
 
 })();
+
+function approve(num) {
+  $.ajax({
+      type: "POST",
+      url: "/approve",
+      data: { num_give: num },
+      success: function () {
+          window.location.reload();
+      }
+  });
+}
+
+// Store the number of the item to be rejected
+let rejectNum = null;
+
+// Function to open the modal
+function openRejectModal(num) {
+    rejectNum = num;
+    $('#rejectModal').modal('show');
+}
+
+// Function to handle the rejection
+function handleReject() {
+    const alasan = document.getElementById('rejectReason').value;
+
+    // Ensure that alasan is defined and not empty
+    if (alasan !== null && alasan !== "") {
+        $.ajax({
+            type: "POST",
+            url: "/reject",
+            data: { num_give: rejectNum, alasan: alasan },
+            success: function () {
+                window.location.reload();
+            }
+        });
+    } else {
+        alert("Rejection reason is required.");
+    }
+}
+
+// Attach the handleReject function to the confirm button
+document.getElementById('confirmRejectBtn').addEventListener('click', handleReject);
+
+
+
+
+
+
+
+function sign_out() {
+  $.removeCookie("mytoken", { path: "/" });
+  alert("Signed out!");
+  window.location.href = "/login";
+}
+
+function delete_order(num) {
+  $.ajax({
+      type: "POST",
+      url: "/delete_order",
+      data: { num_give: num },
+      success: function (response) {
+          if (response.msg === 'delete success!') {
+              window.location.reload();
+          } else {
+              alert('Error: ' + response.message);
+          }
+      },
+      error: function (xhr, status, error) {
+          alert('An error occurred: ' + error);
+      }
+  });
+}
