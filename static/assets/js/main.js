@@ -367,20 +367,19 @@ function sign_out() {
   window.location.href = "/login";
 }
 
-function delete_order(num) {
-  $.ajax({
-      type: "POST",
-      url: "/delete_order",
-      data: { num_give: num },
-      success: function (response) {
-          if (response.msg === 'delete success!') {
-              window.location.reload();
-          } else {
-              alert('Error: ' + response.message);
-          }
-      },
-      error: function (xhr, status, error) {
-          alert('An error occurred: ' + error);
-      }
-  });
-}
+// function delete_order(_id) {
+//   $.ajax({
+//       type: "POST",
+//       url: "/delete_order/" + _id,
+//       success: function(response) {
+//           if (response.msg === 'delete success!') {
+//               window.location.reload();
+//           } else {
+//               alert('Error: ' + response.message);
+//           }
+//       },
+//       error: function(xhr, status, error) {
+//           alert('An error occurred: ' + error);
+//       }
+//   });
+// }

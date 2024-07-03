@@ -114,22 +114,6 @@ def login():
             return render_template('login.html',msg=msg)
 
 
-@app.route("/user/<username>")
-def user(username):
-    # an endpoint for retrieving a user's profile information
-    # and all of their posts
-    token_receive = request.cookies.get("mytoken")
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
-        # if this is my own profile, True
-        # if this is somebody else's profile, False
-        status = username == payload["id"]
-
-        user_info = db.users.find_one({"username": username}, {"_id": False})
-        return render_template("user.html", user_info=user_info, status=status)
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("home"))
-
 
 @app.route("/sign_in", methods=["POST"])
 def sign_in():
@@ -302,16 +286,11 @@ def EditOrder(_id):
 
     return render_template('EditOrder.html', data=data)  
 
-@app.route("/delete_order", methods=["POST"])
-def delete_order():
-    try:
-        num_receive = request.form['num_give']
-        db.order.delete_one({'num': int(num_receive)})
-        return jsonify({'msg': 'delete success!'})
-    except Exception as e:
-        print(f"Error in /delete_order: {e}")
-        return jsonify({'msg': 'error', 'message': str(e)}), 500
-
+@app.route('/deleteorder/<_id>', methods=['GET', 'POST'])
+def delete(_id): 
+    id = ObjectId(_id)
+    db.order.delete_one({'_id':id})
+    return redirect(url_for('order'))
 
 @app.route("/approve", methods=["POST"])
 def approve():

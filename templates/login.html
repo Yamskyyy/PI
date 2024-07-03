@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap" rel="stylesheet">
 
     <!-- Link Mystyle -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+    <link href="../static/assets/css/style.css" rel="stylesheet">
 
 
     <!-- Font Awesome CSS -->
@@ -248,8 +248,8 @@
     <section class="section">
         <div class="container">
             <div class="box" style="max-width: 480px; margin: auto; margin-top: 100px;">
-                <img class="gambarPPA" src="../static/assets/img/logo.png" alt="logoPT">
-                <h2 id="title" style="text-align: center; padding-bottom:10px;">Login Page</h2>
+                <img class="gambarPPA" src="../static/assets/img/logo.png" alt="logoPT"><br><br>
+                <h2 id="title" style="text-align: center; padding-bottom:10px; font-family: Poetsen One, sans-serif;" >Login Page</h2><br>
                 <article class="media">
                     <div class="media-content">
                         <div class="content">
@@ -295,13 +295,12 @@
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </nav>
-                            <hr />
-                            <h4 class="mb-3">Belum Punya Akun? Klik Tombol Daftar dibawah ini</h4>
+                            <!-- <h4 class="mb-3">Belum Punya Akun? Klik Tombol Daftar dibawah ini</h4>
                             <nav class="level is-mobile">
                                 <button class="level-item button is-sparta is-outlined" onclick="toggle_sign_up()">
                                     Daftar
                                 </button>
-                            </nav>
+                            </nav> -->
                         </div>
 
                         <div id="sign-up-box" class="is-hidden">
