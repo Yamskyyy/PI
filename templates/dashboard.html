@@ -20,25 +20,21 @@
                     alt="Hollywood Sign on The Hill" />
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h5 class="card-title">{{item.nama}}</h5>
+                        <h5 class="card-title">{{item.nama}} - {{item.id}}</h5>
                     </div>
+                    <hr>
                     <p class="card-text">
                     <h5 class="card-title" style="color: brown;">Dari : {{item.dari}}</h5>
                     <h5 class="card-title" style="color: brown;">Untuk : {{item.untuk}}</h5>
                     <Strong class="desc">Deskripsi : </Strong> <span>{{item.deskripsi}}</span><br><br>
                     <p><strong>Status :</strong> <span id="status-1">{{item.status}}</span></p>
                     <p><strong>Alasan* :</strong> <span id="status-1">{{item.Alasan}}</span></p>
-                    <button class="btn btn-success" onclick="approve('{{item.num}}')">Approve</button>
-                    <!-- <button class="btn btn-danger" onclick="reject('{{item.num}}')">Reject</button> -->
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" onclick="openRejectModal('{{item.num}}')">Reject</button>
+                    <button class="btn btn-success approve-btn" onclick="approve('{{item.num}}')">Approve</button>
+                    <button id="reject-btn" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" onclick="openRejectModal('{{item.num}}')">Reject</button>
                     
                 </div>
             </div>
         </div>
-        <!-- Button trigger modal -->
-        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Launch static backdrop modal
-        </button> -->
 
         <!-- Modal -->
         <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">

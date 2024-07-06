@@ -770,7 +770,7 @@ h6 {
 --------------------------------------------------------------*/
 .gambarPPA {
   width: 200px;
-  height: 200px;
+  height: 100px;
   position: relative; /* atau absolute, fixed, atau sticky */
   top: 8px; /* Jarak dari atas */
   left: 120px;
@@ -941,6 +941,15 @@ h6 {
 /* Recent Sales */
 .dashboard .recent-sales {
   font-size: 14px;
+}
+
+thead {
+  border-bottom: 2px solid #000; /* Garis bawah */
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
 }
 
 .dashboard .recent-sales .table thead {

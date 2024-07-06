@@ -1,50 +1,11 @@
 {% include 'header.html' %}
 <main id="main" class="main">
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Ambil tombol hapus
-            var deleteButtons = document.querySelectorAll('.delete-button');
-
-            // Loop melalui setiap tombol hapus
-            deleteButtons.forEach(function (button) {
-                button.addEventListener('click', function (event) {
-                    // Berhenti peristiwa default (mengikuti tautan)
-                    event.preventDefault();
-
-                    // Ambil URL penghapusan dari atribut href tombol hapus
-                    var deleteUrl = button.getAttribute('href');
-
-                    // Setel tautan hapus di dalam modal alert
-                    var confirmDeleteButton = document.getElementById('confirmDeleteButton');
-                    confirmDeleteButton.setAttribute('href', deleteUrl);
-
-                    // Tampilkan modal alert
-                    $('#deleteModal').modal('show');
-                });
-            });
-        });
-        document.addEventListener("DOMContentLoaded", function () {
-            // Ambil tombol batal pada modal
-            var cancelButton = document.querySelector('#deleteModal #cancel');
-
-            // Tambahkan event listener untuk tombol batal
-            cancelButton.addEventListener('click', function () {
-                // Sembunyikan modal
-                $('#deleteModal').modal('hide');
-            });
-        });
-
-        function hide() {
-            $('#deleteModal').modal('hide');
-        };
-    </script>
-
 
     <div class="pagetitle">
         <h1>Order Kerja</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                 <li class="breadcrumb-item active">Order Kerja</li>
             </ol>
         </nav>
@@ -55,7 +16,7 @@
             <div
                 style="display: flex; background-color: #B52424; width:150px; border-radius:8px; height:40px; align-items: center;">
 
-                <div style="color: white; margin-left: 14px;">
+                <div style="color: white; margin-left: 10px;">
                     <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -75,24 +36,26 @@
         <div class="card border-0 shadow mb-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table
-                        class="table table-sm table-striped table-centered table-nowrap mb-0 rounded mt-3 align-middle"
-                        style="text-align: center;">
+                    <table class="table table-centered table-nowrap mb-0 rounded mt-3">
                         <thead class="thead-light">
                             <tr>
                                 <th class="border-0 rounded-start">No</th>
-                                <th class="border-0">Nama Order</th>
-                                <th class="border-0">Dari</th>
-                                <th class="border-0">Untuk</th>
+                                <th class="border-0">ID</th>
+                                <th class="border-0">Nama</th>
+                                <th class="border-0">Tanggal Pembuatan</th>
+                                <th class="border-0">Dari Dept</th>
+                                <th class="border-0">Untuk Dept</th>
                                 <th class="border-0">Deskripsi</th>
                                 <th class="border-0">Lampiran Foto</th>
                                 <th class="border-0 rounded-end text-center">Aksi</th>
                             </tr>
                         </thead>
                         {% for item in order %}
-                        <tr style="font-size: 13px;">
+                        <tr>
                             <td>{{loop.index}}</td>
+                            <td>{{item.id}}</td>
                             <td>{{item.nama}}</td>
+                            <td>{{item.tanggal}}</td>
                             <td>{{item.dari}}</td>
                             <td>{{item.untuk}}</td>
                             <td>{{item.deskripsi}}</td>
@@ -104,7 +67,7 @@
                                 <a href="/EditOrder/{{item._id}}">
                                     <img src="https://img.icons8.com/plumpy/26/000000/edit-calendar.png" /></a>
                                 |
-                                <a data-bs-toggle="modal" data-bs-target="#deleteModal" style="cursor:pointer;">
+                                <a href="/deleteorder/{{item._id}}">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25"
                                         viewBox="0 0 172 172" style=" fill:#7d1710;">
                                         <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1"
@@ -145,39 +108,12 @@
                                     </svg></a>
                             </td>
                         </tr>
-                        <!-- Modal -->
-                        <div id="deleteModal" class="modal fade" tabindex="-1" role="dialog"
-                            aria-labelledby="deleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Penghapusan</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                            onclick="hide()">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Apakah Anda yakin ingin menghapus item ini?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" id="cancel"
-                                            data-dismiss="modal">Batal</button>
-                                            <a id="confirmDeleteButton" href="/deleteorder/{{item._id}}"
-                                            class="btn btn-danger">Hapus</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        {% endfor %}
+                    </table>
                 </div>
-                {% endfor %}
-                </table>
             </div>
+            <!-- /.card -->
         </div>
-        <!-- /.card -->
-    </div>
-    </div>
     </div>
 </main><!-- End #main -->
 {% include 'footer.html' %}

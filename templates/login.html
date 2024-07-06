@@ -66,7 +66,7 @@
                     if (response["result"] === "success") {
                         let token = response["token"];
                         $.cookie("mytoken", token, { path: "/" });
-                        alert("Login successful!");
+                        alert("Login Berhasil, Selamat Datang!");
                         window.location.href = "/";
                     } else {
                         alert(response["msg"]);
@@ -231,6 +231,11 @@
             $('#input-password2').val('');
         }
     </script>
+    <style>
+        .section {
+            height: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -246,7 +251,7 @@
     <!-- NAVBAR END -->
 
     <section class="section">
-        <div class="container">
+        <div class="container" style="height: 500PX;">
             <div class="box" style="max-width: 480px; margin: auto; margin-top: 100px;">
                 <img class="gambarPPA" src="../static/assets/img/logo.png" alt="logoPT"><br><br>
                 <h2 id="title" style="text-align: center; padding-bottom:10px; font-family: Poetsen One, sans-serif;" >Login Page</h2><br>

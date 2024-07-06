@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from bson import ObjectId
 import jwt
 import hashlib
+import uuid
 from flask import (
     Flask,
     render_template,
@@ -233,24 +234,36 @@ def AddOrder():
         count = db.order.count_documents({})
         num = count + 1
 
-        gambar=request.files['gambar']
-        extension= gambar.filename.split('.')[-1]
-        today=datetime.now()
-        mytime=today.strftime('%Y-%M-%d:%H-%m-%S')
+        # Menyimpan gambar
+        gambar = request.files['gambar']
+        extension = gambar.filename.split('.')[-1]
+        today = datetime.now()
+        mytime = today.strftime('%Y-%M-%d:%H-%m-%S')
         gambar_name = f'gambar-{mytime}.{extension}'
         save_to = f'static/assets/Imgorder/{gambar_name}'
         gambar.save(save_to)
 
+        # Menambahkan tanggal
+        tanggal = today.strftime('%d-%m-%Y %H:%M:%S')
+        
+        # Membuat ID
+        order_date = today.strftime('%d%m%Y')
+        order_id = f'OK / {num} / {order_date}'
+
+        # Membuat dokumen
         doc = {
-            'num' : num,
-            'nama' : nama,
-            'dari' : dari,
-            'untuk' : untuk,
-            'deskripsi' : deskripsi,
-            'gambar' : gambar_name,
-            'status' : 'Menunggu Persetujuan',
-            'Alasan' : '-'
+            'id': order_id,
+            'num': num,
+            'nama': nama,
+            'dari': dari,
+            'untuk': untuk,
+            'deskripsi': deskripsi,
+            'gambar': gambar_name,
+            'status': 'Menunggu Persetujuan',
+            'Alasan': '-',
+            'tanggal': tanggal  # Menambahkan field tanggal
         }
+
         db.order.insert_one(doc)
         return redirect(url_for('order'))
     return render_template('AddOrder.html')
@@ -270,12 +283,16 @@ def EditOrder(_id):
         gambar_name = f'gambar-{mytime}.{extension}'
         save_to = f'static/assets/Imgorder/{gambar_name}'
         gambar.save(save_to)
+        
+        # Menambahkan tanggal
+        tanggal = today.strftime('%d-%m-%Y %H:%M:%S')
 
         doc = {
             'nama' : nama,
             'dari' : dari,
             'untuk' : untuk,
             'deskripsi' : deskripsi,
+            'tanggal': tanggal 
         }
         if gambar:
             doc['gambar']=gambar_name
@@ -295,9 +312,11 @@ def delete(_id):
 @app.route("/approve", methods=["POST"])
 def approve():
     num_receive = request.form['num_give']
+    today = datetime.now()
+    tanggal = today.strftime('%Y-%m-%d %H:%M:%S')
     db.order.update_one(
         {'num': int(num_receive)},
-        {'$set': {'status': 'Disetujui'}}
+        {'$set': {'status': f'DISETUJUI pada {tanggal}'}}
     )
     return jsonify({'msg': 'update done!'})
 
@@ -305,9 +324,11 @@ def approve():
 def reject():
     num_receive = request.form['num_give']
     alasan_receive = request.form['alasan']
+    today = datetime.now()
+    tanggal = today.strftime('%d-%m-%Y %H:%M:%S')
     db.order.update_one(
         {'num': int(num_receive)},
-        {'$set': {'status': 'Ditolak', 'Alasan' : alasan_receive}}
+        {'$set': {'status': f'DITOLAK pada {tanggal}', 'Alasan' : alasan_receive}}
     )
     return jsonify({'msg': 'update done!'})
 
