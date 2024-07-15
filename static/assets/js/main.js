@@ -323,6 +323,16 @@ function approve(num) {
       }
   });
 }
+function selesai(num) {
+  $.ajax({
+      type: "POST",
+      url: "/selesai",
+      data: { num_give: num },
+      success: function () {
+          window.location.reload();
+      }
+  });
+}
 
 // Store the number of the item to be rejected
 let rejectNum = null;

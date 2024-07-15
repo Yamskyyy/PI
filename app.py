@@ -45,12 +45,15 @@ def home():
             )
             user_info = db.normal_users.find_one({'username': payload.get('id')})
             user_info2 = db.expert_users.find_one({'username': payload.get('id')})
+            user_info3 = db.dept_users.find_one({'username': payload.get('id')})
             order=list(db.order.find({}))
 
             if user_info:
                 return render_template('dashboard.html',user_info=user_info, order=order)
             elif user_info2:
                 return render_template('order.html',user_info2=user_info2, order=order)
+            elif user_info3:
+                return render_template('departemen.html',user_info3=user_info3, order=order)
             else:
                 return render_template('login.html')
 
@@ -94,14 +97,17 @@ def login():
                     SECRET_KEY,
                     algorithms=['HS256']
                 )
-                user_info = db.normal_users.find_one({'username':payload.get('id')})
-                user_info2 = db.expert_users.find_one({'username':payload.get('id')})
+                user_info = db.normal_users.find_one({'username': payload.get('id')})
+                user_info2 = db.expert_users.find_one({'username': payload.get('id')})
+                user_info3 = db.dept_users.find_one({'username': payload.get('id')})
                 order=list(db.order.find({}))
-                
+
                 if user_info:
                     return render_template('dashboard.html',user_info=user_info, order=order)
                 elif user_info2:
                     return render_template('order.html',user_info2=user_info2, order=order)
+                elif user_info3:
+                    return render_template('departemen.html',user_info3=user_info3, order=order)
                 else:
                     return render_template('login.html')
                     
@@ -135,6 +141,12 @@ def sign_in():
             "password": pw_hash,
         }
     )
+    result3 = db.dept_users.find_one(
+        {
+            "username": username_receive,
+            "password": pw_hash,
+        }
+    )
     if result:
         payload = {
             "id": username_receive,
@@ -150,6 +162,20 @@ def sign_in():
             }
         )
     elif result2:
+        payload = {
+            "id": username_receive,
+            # the token will be valid for 24 hours
+            "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+        return jsonify(
+            {
+                "result": "success",
+                "token": token,
+            }
+        )
+    elif result3:
         payload = {
             "id": username_receive,
             # the token will be valid for 24 hours
@@ -187,6 +213,15 @@ def sign_up():
             }
         db.expert_users.insert_one(doc)
         return jsonify({'result': 'success'})
+    elif(role_receive == 'dept'):
+        doc = {
+            "username": username_receive,                               
+            "password": password_hash,                                  
+            "profile_name": username_receive,
+            "role":role_receive,                                            
+            }
+        db.dept_users.insert_one(doc)
+        return jsonify({'result': 'success'})
     elif(role_receive == 'normal'):
         doc = {
             "username": username_receive,                               
@@ -206,7 +241,8 @@ def check_dup():
     username_receive = request.form["username_give"]
     exists = bool(db.normal_users.find_one({'username':username_receive}))
     exists2 = bool(db.expert_users.find_one({'username':username_receive}))
-    return jsonify({"result": "success", "exists": exists+exists2})
+    exists3 = bool(db.dept_users.find_one({'username':username_receive}))
+    return jsonify({"result": "success", "exists": exists+exists2+exists3})
 
 @app.route('/order',methods=['GET'])
 def order():
@@ -248,7 +284,7 @@ def AddOrder():
         
         # Membuat ID
         order_date = today.strftime('%d%m%Y')
-        order_id = f'OK / {num} / {order_date}'
+        order_id = f'OK/{num}/{order_date}'
 
         # Membuat dokumen
         doc = {
@@ -261,7 +297,8 @@ def AddOrder():
             'gambar': gambar_name,
             'status': 'Menunggu Persetujuan',
             'Alasan': '-',
-            'tanggal': tanggal  # Menambahkan field tanggal
+            'tanggal': tanggal,  # Menambahkan field tanggal
+            'konfirmasi': '-'
         }
 
         db.order.insert_one(doc)
@@ -329,6 +366,17 @@ def reject():
     db.order.update_one(
         {'num': int(num_receive)},
         {'$set': {'status': f'DITOLAK pada {tanggal}', 'Alasan' : alasan_receive}}
+    )
+    return jsonify({'msg': 'update done!'})
+
+@app.route("/selesai", methods=["POST"])
+def selesai():
+    num_receive = request.form['num_give']
+    today = datetime.now()
+    tanggal = today.strftime('%Y-%m-%d %H:%M:%S')
+    db.order.update_one(
+        {'num': int(num_receive)},
+        {'$set': {'konfirmasi': f'Order Kerja telah DISELESAIKAN pada {tanggal}'}}
     )
     return jsonify({'msg': 'update done!'})
 
