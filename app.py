@@ -280,7 +280,7 @@ def AddOrder():
         gambar.save(save_to)
 
         # Menambahkan tanggal
-        tanggal = today.strftime('%d-%m-%Y %H:%M:%S')
+        tanggal = today.strftime('%d-%m-%Y')
         
         # Membuat ID
         order_date = today.strftime('%d%m%Y')
@@ -316,13 +316,13 @@ def EditOrder(_id):
         gambar=request.files['gambar']
         extension= gambar.filename.split('.')[-1]
         today=datetime.now()
-        mytime=today.strftime('%Y-%M-%d:%H-%m-%S')
+        mytime=today.strftime('%Y-%M-%d:%H-%M-%S')
         gambar_name = f'gambar-{mytime}.{extension}'
         save_to = f'static/assets/Imgorder/{gambar_name}'
         gambar.save(save_to)
         
         # Menambahkan tanggal
-        tanggal = today.strftime('%d-%m-%Y %H:%M:%S')
+        tanggal = today.strftime('%d-%m-%Y')
 
         doc = {
             'nama' : nama,
@@ -350,7 +350,7 @@ def delete(_id):
 def approve():
     num_receive = request.form['num_give']
     today = datetime.now()
-    tanggal = today.strftime('%Y-%m-%d %H:%M:%S')
+    tanggal = today.strftime('%Y-%m-%d')
     db.order.update_one(
         {'num': int(num_receive)},
         {'$set': {'status': f'DISETUJUI pada {tanggal}'}}
@@ -362,7 +362,7 @@ def reject():
     num_receive = request.form['num_give']
     alasan_receive = request.form['alasan']
     today = datetime.now()
-    tanggal = today.strftime('%d-%m-%Y %H:%M:%S')
+    tanggal = today.strftime('%d-%m-%Y')
     db.order.update_one(
         {'num': int(num_receive)},
         {'$set': {'status': f'DITOLAK pada {tanggal}', 'Alasan' : alasan_receive}}
@@ -373,7 +373,7 @@ def reject():
 def selesai():
     num_receive = request.form['num_give']
     today = datetime.now()
-    tanggal = today.strftime('%Y-%m-%d %H:%M:%S')
+    tanggal = today.strftime('%d-%m-%Y')
     db.order.update_one(
         {'num': int(num_receive)},
         {'$set': {'konfirmasi': f'Order Kerja telah DISELESAIKAN pada {tanggal}'}}
